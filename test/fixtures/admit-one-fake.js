@@ -32,7 +32,7 @@ module.exports = function(options) {
   };
 
   opts._attrs = {
-    passwordDigest: function(user) { return user[opts.passwordDigest]; }
+    all: function(user) { return user; }
   };
 
   return _.extend(admit(opts), { _options: opts });
