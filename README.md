@@ -33,22 +33,27 @@ var admit = require('admit-one-mongo')({
 var app = express();
 var api = express.Router();
 
+app.use(require('body-parser').json());
+
 api.post('/users', admit.create, function(req, res) {
   // user accessible via req.auth.user
   res.json({ status: 'ok' });
 });
 
-api.post('/sessions', admit.authenticate, function() {
+api.post('/sessions', admit.authenticate, function(req, res) {
   // user accessible via req.auth.user
   res.json({ status: 'ok' });
 });
 
 // all routes defined from here on will require authorization
-api.use(app.auth.authorize);
+api.use(admit.authorize);
 api.delete('/sessions/current', admit.invalidate, function(req, res) {
   if (req.auth.user) { throw new Error('Session not invalidated.'); }
   res.json({ status: 'ok' });
 });
+
+// application routes
+app.use('/api', api);
 ```
 
 ## Comparison to Passport
