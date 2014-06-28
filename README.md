@@ -37,12 +37,13 @@ var api = express.Router();
 app.use(require('body-parser').json());
 
 api.post('/users', admit.create, function(req, res) {
-  // user accessible via req.auth.user
-  res.json({ status: 'ok' });
+  // user representations accessible via
+  // req.auth.user & req.auth.db.user
+  res.json({ user: req.auth.user });
 });
 
 api.post('/sessions', admit.authenticate, function(req, res) {
-  // user accessible via req.auth.user
+  // user accessible via req.auth
   res.json({ status: 'ok' });
 });
 
