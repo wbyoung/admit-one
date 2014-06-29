@@ -2,11 +2,11 @@
 
 [![NPM version][npm-image]][npm-url] [![Build status][travis-image]][travis-url] [![Code Climate][codeclimate-image]][codeclimate-url] [![Coverage Status][coverage-image]][coverage-url] [![Dependencies][david-image]][david-url] [![devDependencies][david-dev-image]][david-dev-url]
 
-Admit One is an extensible authentication and authorization system for Node.js
+Admit One is an adaptable authentication and authorization system for Node.js
 applications that require token based authentication. It aims to be incredibly
 easy to configure with varying databases, ORM tools, and front end frameworks.
 
-## Available Extensions
+## Available Adapters
 
 <img align="right" src="resources/admit-one-small.png" alt="Caribou">
 

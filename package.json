@@ -1,7 +1,7 @@
 {
   "name": "admit-one",
   "version": "0.2.0",
-  "description": "Extensible Authentication",
+  "description": "Adaptable Authentication",
   "homepage": "https://github.com/wbyoung/admit-one",
   "bugs": {
     "url": "https://github.com/wbyoung/admit-one/issues"
