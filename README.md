@@ -25,7 +25,7 @@ easy to configure with varying databases, ORM tools, and front end frameworks.
 The following example uses [`admit-one-mongo`][admit-one-mongo].
 
 ```javascript
-var admit = require('admit-one-mongo')({
+var admit = require('admit-one')('mongo', {
   mongo: {
     db: 'mongodb://localhost/dbname'
   }

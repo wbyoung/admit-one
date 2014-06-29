@@ -1,11 +1,6 @@
 'use strict';
 
-var _ = require('lodash');
-var admit = require('../..');
-
-module.exports = function(options) {
-  var opts = admit.helpers.defaults(options || {});
-
+module.exports = function(/*options*/) {
   var create = function(username, passwordDigest) {
   };
 
@@ -23,7 +18,9 @@ module.exports = function(options) {
     return true;
   };
 
-  opts._users = {
+  var adapter = {};
+
+  adapter.users = {
     create: create,
     find: find,
     findByToken: findByToken,
@@ -31,11 +28,9 @@ module.exports = function(options) {
     removeToken: removeToken
   };
 
-  opts._attrs = {
+  adapter.attrs = {
     all: function(user) { return user; }
   };
 
-  return _.extend(admit(opts), { _options: opts });
+  return adapter;
 };
-
-module.exports.__admit = admit;
