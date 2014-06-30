@@ -88,27 +88,4 @@ describe('admit-one', function() {
       }.bind(this));
     });
   });
-
-  describe('authenticate', function() {
-    it('requires body');
-    it('requires username');
-    it('requires password');
-    it('fails for missing users');
-    it('accesses digest on user');
-    it('fails for wrong passwords');
-
-    it('authenticates users');
-  });
-
-  describe('authorize', function() {
-    it('ignores requests without authorization header');
-    it('authorizes when token is valid');
-    it('restricts access when token is invalid valid');
-  });
-
-  describe('invalidate', function() {
-    it('only works when already authorized');
-    it('invalidates sessions');
-    it('fails if token removal fails');
-  });
 });
