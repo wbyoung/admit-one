@@ -22,22 +22,34 @@ describe('admit-one', function() {
     this.user = { username: 'user', password: 'password' };
     this.req = {};
     this.res = {};
+    this.req.auth = {
+      user: {},
+      db: { user: {} },
+      token: ''
+    };
     this.res.setHeader = sinon.spy();
     this.results = {};
-    this.results.find = this.user;
-    sinon.stub(this.admit._adapter.users, 'find',
-      function() { return this.results.find; }.bind(this));
-    sinon.stub(this.admit._adapter.users, 'create',
-      function() { return this.results.create; }.bind(this));
+    this.results.removeToken = true;
+    sinon.stub(this.admit._adapter.users, 'removeToken',
+      function() { return this.results.removeToken; }.bind(this));
   });
 
   afterEach(function() {
-    this.admit._adapter.users.find.restore();
-    this.admit._adapter.users.create.restore();
+    this.admit._adapter.users.removeToken.restore();
   });
 
   describe('invalidate', function() {
-    it('only works when already authorized');
+    it('only works when already authorized', function(done) {
+      this.req.auth = undefined;
+      this.res.json = function(code, json) {
+        expect(code).to.eql(401);
+        expect(json).to.eql({ error: 'not authorized (auth)' });
+        expect(this.admit._adapter.users.removeToken).to.not.been.called;
+        done();
+      }.bind(this);
+      this.admit.invalidate(this.req, this.res, null);
+    });
+
     it('invalidates sessions');
     it('fails if token removal fails');
   });

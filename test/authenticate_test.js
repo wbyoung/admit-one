@@ -39,8 +39,9 @@ describe('admit-one', function() {
       this.res.json = function(code, json) {
         expect(code).to.eql(400);
         expect(json).to.eql({ error: 'missing body' });
+        expect(this.admit._adapter.users.find).to.not.been.called;
         done();
-      };
+      }.bind(this);
       this.admit.authenticate(this.req, this.res, null);
     });
 
