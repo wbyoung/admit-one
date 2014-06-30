@@ -29,12 +29,9 @@ describe('admit-one', function() {
     this.results.find = this.user;
     sinon.stub(this.admit._adapter.users, 'find',
       function() { return this.results.find; }.bind(this));
-    sinon.stub(this.admit._adapter.users, 'create',
-      function() { return this.results.create; }.bind(this));
   });
   afterEach(function() {
     this.admit._adapter.users.find.restore();
-    this.admit._adapter.users.create.restore();
   });
 
   describe('authenticate', function() {
