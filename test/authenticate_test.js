@@ -19,7 +19,8 @@ describe('admit-one', function() {
   });
 
   beforeEach(function() {
-    this.user = { username: 'user', password: 'password' };
+    this.user = { username: 'user', passwordDigest: 'passworddigest' };
+    this.session = { username: 'user', password: 'password' };
     this.req = {};
     this.res = {};
     this.res.setHeader = sinon.spy();
@@ -65,7 +66,17 @@ describe('admit-one', function() {
       this.admit.authenticate(this.req, this.res, null);
     });
 
-    it('fails for missing users');
+    it('fails for missing users', function(done) {
+      this.req.body = { session: this.session };
+      this.results.find = undefined;
+      this.res.json = function(code, json) {
+        expect(code).to.eql(401);
+        expect(json).to.eql({ error: 'invalid credentials (username)' });
+        done();
+      };
+      this.admit.authenticate(this.req, this.res, null);
+    });
+
     it('accesses digest on user');
     it('fails for wrong passwords');
 
