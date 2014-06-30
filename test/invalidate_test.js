@@ -1,5 +1,7 @@
 'use strict';
 
+require('./helpers');
+
 var sinon = require('sinon');
 var chai = require('chai');
 var expect = chai.expect;
@@ -8,8 +10,6 @@ chai.use(require('sinon-chai'));
 var admit = require('..');
 var path = require('path');
 var bluebird = require('bluebird'), Promise = bluebird;
-
-require('./allow-fixture-loading');
 
 describe('admit-one', function() {
   before(function() {
