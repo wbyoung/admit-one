@@ -36,7 +36,14 @@ describe('admit-one', function() {
   });
 
   describe('authenticate', function() {
-    it('requires body');
+    it('requires body', function(done) {
+      this.res.json = function(code, json) {
+        expect(code).to.eql(400);
+        expect(json).to.eql({ error: 'missing body' });
+        done();
+      };
+      this.admit.authenticate(this.req, this.res, null);
+    });
     it('requires username');
     it('requires password');
     it('fails for missing users');
