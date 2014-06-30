@@ -19,7 +19,8 @@ describe('admit-one', function() {
   });
 
   beforeEach(function() {
-    this.user = { username: 'user', passwordDigest: 'passworddigest' };
+    var digest = '$2a$04$7XP/cI3x8zmvsRuv5ODUWevSjALzmu8KjSerpXVPaT8EfJPR69Zrm';
+    this.user = { username: 'user', passwordDigest: digest };
     this.session = { username: 'user', password: 'password' };
     this.req = {};
     this.res = {};
@@ -77,9 +78,26 @@ describe('admit-one', function() {
       this.admit.authenticate(this.req, this.res, null);
     });
 
-    it('accesses digest on user');
-    it('fails for wrong passwords');
+    it('fails for wrong passwords', function(done) {
+      this.req.body = { session: { username: 'user', password: 'invalid' } };
+      this.res.json = function(code, json) {
+        expect(code).to.eql(401);
+        expect(json).to.eql({ error: 'invalid credentials (password)' });
+        done();
+      };
+      this.admit.authenticate(this.req, this.res, null);
+    });
 
-    it('authenticates users');
+    it('authenticates users', function(done) {
+      this.req.body = { session: this.session };
+      this.admit.authenticate(this.req, this.res, function() {
+        expect(this.res.setHeader).to.have.been.calledOnce;
+        expect(this.res.setHeader).to.have.been.calledWith('Authorization', 'Token 7a4d3e2073a542549a174900bb2ed824');
+        expect(this.req.auth.user).to.eql({ username: 'user' });
+        expect(this.req.auth.db.user).to.eql(this.user);
+        expect(this.req.auth.token).to.eql('7a4d3e2073a542549a174900bb2ed824');
+        done();
+      }.bind(this));
+    });
   });
 });
