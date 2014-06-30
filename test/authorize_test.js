@@ -11,38 +11,43 @@ var bluebird = require('bluebird'), Promise = bluebird;
 
 describe('admit-one', function() {
   before(function() {
-    sinon.stub(admit.__uuid, 'v4').returns('7a4d3e20-73a5-4254-9a17-4900bb2ed824');
     this.admit = admit(path.join(__dirname, './fixtures/admit-one-fake'));
-  });
-  after(function() {
-    admit.__uuid.v4.restore();
   });
 
   beforeEach(function() {
-    this.user = { username: 'user', password: 'password' };
+    this.user = { username: 'user', passwordDigest: 'digest' };
     this.req = {};
     this.res = {};
-    this.authorizationHeader = 'Token 123';
     this.res.setHeader = sinon.spy();
     this.results = {};
-    this.results.find = this.user;
+    this.results.authorizationHeader = 'Token 123';
+    this.results.findByToken = this.user;
     this.req.get = sinon.spy(function(header) {
-      return header === 'Authorization' && this.authorizationHeader;
+      return header === 'Authorization' && this.results.authorizationHeader;
     }.bind(this));
-    sinon.stub(this.admit._adapter.users, 'find',
-      function() { return this.results.find; }.bind(this));
-    sinon.stub(this.admit._adapter.users, 'create',
-      function() { return this.results.create; }.bind(this));
+    sinon.stub(this.admit._adapter.users, 'findByToken',
+      function() { return this.results.findByToken; }.bind(this));
   });
 
   afterEach(function() {
-    this.admit._adapter.users.find.restore();
-    this.admit._adapter.users.create.restore();
+    this.admit._adapter.users.findByToken.restore();
   });
 
   describe('authorize', function() {
     it('rejects requests without authorization header', function(done) {
-      this.authorizationHeader = undefined;
+      this.results.authorizationHeader = undefined;
+      this.res.json = function(code, json) {
+        expect(code).to.eql(401);
+        expect(json).to.eql({ error: 'invalid credentials (token)' });
+        done();
+      };
+      this.admit.authorize(this.req, this.res, function() {
+        throw new Error('what');
+      });
+    });
+
+    it('restricts access when token is invalid', function(done) {
+      this.results.findByToken = undefined;
       this.res.json = function(code, json) {
         expect(code).to.eql(401);
         expect(json).to.eql({ error: 'invalid credentials (user lookup)' });
@@ -51,7 +56,13 @@ describe('admit-one', function() {
       this.admit.authorize(this.req, this.res, null);
     });
 
-    it('authorizes when token is valid');
-    it('restricts access when token is invalid valid');
+    it('authorizes when token is valid', function(done) {
+      this.admit.authorize(this.req, this.res, function() {
+        expect(this.req.auth.user).to.eql({ username: 'user' });
+        expect(this.req.auth.db.user).to.eql(this.user);
+        expect(this.req.auth.token).to.eql('123');
+        done();
+      }.bind(this));
+    });
   });
 });
