@@ -22,21 +22,35 @@ describe('admit-one', function() {
     this.user = { username: 'user', password: 'password' };
     this.req = {};
     this.res = {};
+    this.authorizationHeader = 'Token 123';
     this.res.setHeader = sinon.spy();
     this.results = {};
     this.results.find = this.user;
+    this.req.get = sinon.spy(function(header) {
+      return header === 'Authorization' && this.authorizationHeader;
+    }.bind(this));
     sinon.stub(this.admit._adapter.users, 'find',
       function() { return this.results.find; }.bind(this));
     sinon.stub(this.admit._adapter.users, 'create',
       function() { return this.results.create; }.bind(this));
   });
+
   afterEach(function() {
     this.admit._adapter.users.find.restore();
     this.admit._adapter.users.create.restore();
   });
 
   describe('authorize', function() {
-    it('ignores requests without authorization header');
+    it('rejects requests without authorization header', function(done) {
+      this.authorizationHeader = undefined;
+      this.res.json = function(code, json) {
+        expect(code).to.eql(401);
+        expect(json).to.eql({ error: 'invalid credentials (user lookup)' });
+        done();
+      };
+      this.admit.authorize(this.req, this.res, null);
+    });
+
     it('authorizes when token is valid');
     it('restricts access when token is invalid valid');
   });
