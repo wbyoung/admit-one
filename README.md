@@ -126,6 +126,13 @@ These points are not flaws that should affect the security of your users' data
 and will not prevent your application from running securely.
 
 
+## Example Project
+
+There's an [example app][admit-one-bookshelf-ember-example] that uses
+[`admit-one-bookshelf`][admit-one-bookshelf] and
+[`admit-one-ember`][admit-one-ember] that could be a helpful starting place.
+
+
 ## License
 
 This project is distributed under the MIT license.
@@ -147,5 +154,6 @@ This project is distributed under the MIT license.
 [admit-one-mongo]: https://github.com/wbyoung/admit-one-mongo
 [admit-one-bookshelf]: https://github.com/wbyoung/admit-one-bookshelf
 [admit-one-ember]: https://github.com/wbyoung/admit-one-ember
+[admit-one-bookshelf-ember-example]: https://github.com/wbyoung/admit-one-bookshelf-ember-example
 
 [passport]: http://passportjs.org
