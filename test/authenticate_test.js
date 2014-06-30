@@ -44,8 +44,27 @@ describe('admit-one', function() {
       };
       this.admit.authenticate(this.req, this.res, null);
     });
-    it('requires username');
-    it('requires password');
+
+    it('requires username', function(done) {
+      this.req.body = { session: { password: 'hello' } };
+      this.res.json = function(code, json) {
+        expect(code).to.eql(400);
+        expect(json).to.eql({ error: 'missing parameter session[username]' });
+        done();
+      };
+      this.admit.authenticate(this.req, this.res, null);
+    });
+
+    it('requires password', function(done) {
+      this.req.body = { session: { username: 'hello' } };
+      this.res.json = function(code, json) {
+        expect(code).to.eql(400);
+        expect(json).to.eql({ error: 'missing parameter session[password]' });
+        done();
+      };
+      this.admit.authenticate(this.req, this.res, null);
+    });
+
     it('fails for missing users');
     it('accesses digest on user');
     it('fails for wrong passwords');
