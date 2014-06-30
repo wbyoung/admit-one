@@ -65,7 +65,12 @@ strategy for user creation, authentication, and authorization. That strategy
 is what Passport refers to as a _basic_ strategy. Unfortunately, though,
 Passport leaves it up to developers to properly handle the secure storage of
 passwords during user creation and properly verifying passwords during
-authentication.
+authentication when using a basic strategy. Ideally, most of this repetitive
+work would not need to be handled by every project individually, and that's
+where Admit One comes in.
+
+Admit One does not support other strategies besides basic authentication and
+authorization. If you need support for something like OAuth, use Passport.
 
 
 ## API
