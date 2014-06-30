@@ -9,9 +9,11 @@ var admit = require('..');
 var path = require('path');
 var bluebird = require('bluebird'), Promise = bluebird;
 
+require('./allow-fixture-loading');
+
 describe('admit-one', function() {
   before(function() {
-    this.admit = admit(path.join(__dirname, './fixtures/admit-one-fake'));
+    this.admit = admit('fake');
   });
 
   beforeEach(function() {

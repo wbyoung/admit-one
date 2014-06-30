@@ -9,10 +9,12 @@ var admit = require('..');
 var path = require('path');
 var bluebird = require('bluebird'), Promise = bluebird;
 
+require('./allow-fixture-loading');
+
 describe('admit-one', function() {
   before(function() {
     sinon.stub(admit.__uuid, 'v4').returns('7a4d3e20-73a5-4254-9a17-4900bb2ed824');
-    this.admit = admit(path.join(__dirname, './fixtures/admit-one-fake'));
+    this.admit = admit('fake');
   });
   after(function() {
     admit.__uuid.v4.restore();
