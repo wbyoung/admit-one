@@ -47,7 +47,7 @@ api.post('/sessions', admit.authenticate, function(req, res) {
   res.json({ session: req.auth.user });
 });
 
-// all routes defined from here on will require authorization
+// all routes defined below this line will require authorization
 api.use(admit.authorize);
 api.delete('/sessions/current', admit.invalidate, function(req, res) {
   if (req.auth.user) { throw new Error('Session not invalidated.'); }
